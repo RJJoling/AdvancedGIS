@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="mypointsGE" id="mypointsGE">
+	<SimpleField name="id" type="string"></SimpleField>
+</Schema>
+<Folder><name>mypointsGE</name>
+  <Placemark>
+	<name>WUR - Gaia</name>
+	<ExtendedData><SchemaData schemaUrl="#mypointsGE">
+		<SimpleData name="id">1</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>5.666,51.9872</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<name>Home - Utrecht</name>
+	<ExtendedData><SchemaData schemaUrl="#mypointsGE">
+		<SimpleData name="id">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>5.121621,52.1018</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
