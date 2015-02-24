@@ -22,7 +22,7 @@ tkpack(slider, butt1, butt2)
 fnames <- character()
 for (i in 0:100){
   fnam=paste("output/perc", sprintf("%03d", i), ".png", sep="")
-  png(filename = paste(fnam, sep = ""))
+  png(filename = paste(fnam, sep = ""), width = 1000, height = 600, units = "px")
   par(mfcol=c(1,2),mar=c(4,2,1,1), xaxs="i", yaxs="i")
   drawhypso(i)
   dev.off()
