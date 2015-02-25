@@ -2,12 +2,10 @@
 OnLineSegment <- function(x0,y0, x1,y1, x2,y2){
   # Returns TRUE if (x0,y0) is on the line segment between (x1,y1) and
   # (x2,y2)
-  if (x0 < min(x1,x2) || y0 < min(y1,y2) || x0 > max(x1,x2) || y0 >
-        max(y1,y2)) return(F)
+  if (x0 < min(x1,x2) || y0 < min(y1,y2) || x0 > max(x1,x2) || y0 > max(y1,y2)) return(F)
   else
-    dist <- ifelse((x2 == x1 && y2 == y1), sqrt((x1-x0)^2 + (y1-
-                                                               y0)^2), abs((x2-x1)*(y1-y0) - (x1-x0)*(y2-y1)) / sqrt((x2-x1)^2
-                                                                                                                     + (y2-y1)^2))
+    dist <- ifelse((x2 == x1 && y2 == y1), sqrt((x1-x0)^2 + (y1-y0)^2), 
+            abs((x2-x1)*(y1-y0) - (x1-x0)*(y2-y1)) / sqrt((x2-x1)^2 + (y2-y1)^2))
   dist <= 0.1
 }
 

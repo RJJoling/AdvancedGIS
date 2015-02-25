@@ -264,3 +264,22 @@ kos2d$time[infectKos] # Explain the response!
 
 # plot
 points(kos2d[infectKos,], pch=19, cex=0.5, col="red") # Explain!
+
+
+# Overlay in SpaceTime ----------------------------------------------------
+
+# information about method over
+showMethods(over)
+?sp::over
+
+# make spacetime object for recorded locations Grivla
+gri <- STI(SpatialPoints(cbind(Grivla2008$Locale_E, Grivla2008$Locale_N)), Grivla2008$LMT_date)
+gri@sp@proj4string <- prj_string_RT90
+
+# plot
+stplot(kos, type = "l", number=12)
+stplot(gri, type = "l", number=12)
+
+# do points overlap?
+test <- over(kos,gri)
+summary(test) #no... (due to significant numbers for space and time)
