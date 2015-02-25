@@ -1,3 +1,4 @@
+# load script
 source("R/hypso_curve.R")
 
 #Create seperate window

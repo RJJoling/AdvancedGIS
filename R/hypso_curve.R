@@ -1,3 +1,4 @@
+# load libraries
 if (!require("sp")) install.packages("sp")
 if (!require("raster")) install.packages("raster")
 if (!require("rgdal")) install.packages("rgdal")

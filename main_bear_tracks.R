@@ -1,3 +1,4 @@
+# load libraries
 if (!require("sp")) install.packages("sp")
 if (!require("rgl")) install.packages("rgl")
 if (!require("rgdal")) install.packages("rgdal")
