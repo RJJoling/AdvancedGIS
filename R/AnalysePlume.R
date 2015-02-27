@@ -2,13 +2,14 @@
 rm(list=ls())
 
 # Load required packages
-library(sp)
-library(gstat)
-library(rgdal)
-library(rgeos)
+if (!require("sp")) install.packages("sp")
+if (!require("gstat")) install.packages("gstat")
+if (!require("rgdal")) install.packages("rgdal")
+if (!require("rgeos")) install.packages("rgeos")
+
 
 # Enter group number
-group <- 5   # provide correct number
+group <- 5 # provide correct number
 
 # Read the data of all groups
 # CLEAR THE CACHE OF YOUR WEB BROWSER (F5 or Ctrl-Shift-R while using the web browser) !!!!
@@ -58,11 +59,11 @@ all_rd <- data.frame(all_rd)
 CreateSnapshot <- function(mapdata, predtime, starttime, grd){
   mapdata$t <- as.numeric(difftime(predtime, mapdata$datime, units="mins"))
   grd$t <- rep(as.numeric(difftime(predtime, starttime, units="mins")),10000)
-  subdata <- subset(mapdata, t>=0 & t <= 45)
-  subdata$t <- subdata$t*5.0  # anisotropy time dimension
+  subdata <- subset(mapdata, t>=0 & t <= 7.5)
+  subdata$t <- subdata$t*17.0  # anisotropy time dimension
   if (nrow(subdata) > 0){
     coordinates(subdata) <- ~x+y+t
-    outmap <- idw(ppm~1, subdata, SpatialPoints(grd), idp=2.0, debug.level=0)$var1.pred
+    outmap <- idw(ppm~1, subdata, SpatialPoints(grd), idp=4.9, debug.level=0)$var1.pred
   } else{
     outmap <- rep(0, 10000)
   }
@@ -82,15 +83,22 @@ for (i in 1:8){
   load(con)
   close(con)
   rm(con)
+
   # Is threshold exceeded in reference map?
   timeslice$danger <- as.factor(timeslice$plume > 100)
+  View(timeslice$danger)
+
   # compute misclassification cost
   mycost <- mycost + sum(ifelse(mymap$danger == F & timeslice$danger == T, 5, 
                                 ifelse(mymap$danger == T & timeslice$danger == F, 1, 0)))
+  
+  
 }
 
+
+
 # Show a map
-i <- 4   # for example
+i <- 8   # for example
 mymap <- CreateSnapshot(all_rd, pred_times[i], start_time, RDgrid)
 levels(mymap$danger) <- c("safe","hazard")
 if (length(unique(mymap$danger))==1)
@@ -116,9 +124,9 @@ groupObserve <- all_rd[which(all_rd$GNo == group),]
 # repeat untill nobsgroup measurements are made.
 
 # Read a polygon difining areas that cannot be sampled // Substitute folder name
-forbidden <- readOGR("F:/AdvancedGI_GIS/Campus/WaterBuildings.shp", "WaterBuildings")
+forbidden <- readOGR("data/CampusWGS84/WaterBuildings.shp", "WaterBuildings")
 # Read studyarea
-studarea <- readOGR("F:/AdvancedGI_GIS/Campus/true_box.kml", "true")
+studarea <- readOGR("data/CampusWGS84/true_box.kml", "true")
 studarea@proj4string <- forbidden@proj4string
 # Project to Dutch grid (RD)
 forbidden <- spTransform(forbidden, prj_string_RD)
@@ -174,7 +182,7 @@ groupObserve$t <- as.numeric(difftime(groupObserve$datime, start_time, unit="min
 set.seed(187187) # make reproduceable
 
 randomcosts <- numeric(0)
-for (i in 1:100){   # 100 realizations of a random walk (maybe you want more or fewer)
+for (i in 1:250){   # 100 realizations of a random walk (maybe you want more or fewer)
   print(paste("Run", i, "of 100"), quote = F)
   path <- RandomWalk(groupObserve, valid)
   minute <- as.integer(difftime(path$datime, start_time, unit="mins")+0.5)
